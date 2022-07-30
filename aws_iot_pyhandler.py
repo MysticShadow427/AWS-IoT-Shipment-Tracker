@@ -42,34 +42,38 @@ try:
     while True:
         time.sleep(0.01)
         if serial.in_waiting>0:
-            lattitude=ser.readline().decode('utf-8').rstrip() #reading from arduino
-            print(lattitude)
-            #now publish this data to a topic
-            myMQTTClient.publish(topic="shipmenttracker/lattitude",
+            msg = ser.readline().decode('utf-8').rstrip()
+            if(msg=="Sending data"):
+                lattitude=ser.readline().decode('utf-8').rstrip() #reading from arduino
+                print(lattitude)
+                #now publish this data to a topic
+                myMQTTClient.publish(topic="shipmenttracker/lattitude",
                                 QoS=1,
                                 payload='{"Lattitude":"'+str(lattitude)+'"}') #paylaod can be json document also
-        else:
-            ser.reset_input_buffer()    
-        time.sleep(5)  #synchronizing with arduino
-        if serial.in_waiting>0:
-            longitude=ser.readline().decode('utf-8').rstrip() #reading from arduino
-            print(longitude)
-            #now publish this data to a topic
-            myMQTTClient.publish(topic="shipmenttracker/longitude",
+            else:
+                ser.reset_input_buffer()    
+            time.sleep(5)  #synchronizing with arduino
+            if serial.in_waiting>0:
+                longitude=ser.readline().decode('utf-8').rstrip() #reading from arduino
+                print(longitude)
+                #now publish this data to a topic
+                myMQTTClient.publish(topic="shipmenttracker/longitude",
                                 QoS=1,
                                 payload='{"Longitude":"'+str(longitude)+'"}') #paylaod can be json document also
-        else:
-            ser.reset_input_buffer()      
-        time.sleep(5)  #synchronizing with arduino
-        if serial.in_waiting>0:
-            datetime=ser.readline().decode('utf-8').rstrip() #reading from arduino
-            print(datetime)
-            #now publish this data to a topic
-            myMQTTClient.publish(topic="shipmenttracker/datetime",
+            else:
+                ser.reset_input_buffer()      
+                time.sleep(5)  #synchronizing with arduino
+            if serial.in_waiting>0:
+                datetime=ser.readline().decode('utf-8').rstrip() #reading from arduino
+                print(datetime)
+                #now publish this data to a topic
+                myMQTTClient.publish(topic="shipmenttracker/datetime",
                                 QoS=1,
                                 payload='{"Date&Time":"'+str(datetime)+'"}') #paylaod can be json document also
+            else:
+                ser.reset_input_buffer()
         else:
-            ser.reset_input_buffer() 
+            print('NO data from Arduino')         
 except KeyboardInterrupt:
     print("---")
     print("Closing Serial communication.")
