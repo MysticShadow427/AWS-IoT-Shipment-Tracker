@@ -15,7 +15,7 @@
 int status = WL_IDLE_STATUS;     // the WiFi radio's status
 
 
-static const int RXPin = 4, TXPin = 3;
+static const int RXPin = 9, TXPin = 10;
 static const uint32_t GPSBaud = 4800;
 int triggerLEDPin=7;
 
